@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Never Forget!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     html,
     body {
@@ -58,6 +61,62 @@
     #instructions.show {
       opacity: 1;
     }
+
+    .outro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      z-index: 4;
+      transition: opacity 1.25s ease;
+      pointer-events: none;
+    }
+
+    .outro.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .outro-text {
+      font-family: 'Press Start 2P', monospace;
+      line-height: 1.75;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s;
+    }
+
+    .outro.show .outro-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .outro-text span {
+      display: block;
+      font-size: clamp(1rem, 2.5vw, 2rem);
+    }
+
+    .outro-text a {
+      display: block;
+      color: #00ffea;
+      text-decoration: none;
+      font-size: clamp(1.4rem, 5vw, 3rem);
+      margin-top: 0.75rem;
+    }
+
+    .outro-text a:hover,
+    .outro-text a:focus-visible {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -69,10 +128,17 @@
     Your browser does not support the video tag.
   </video>
   <div id="instructions">Tap the screen to enable audio playback.</div>
+  <div id="outro" class="outro" aria-live="polite">
+    <div class="outro-text">
+      <span>Learn more @</span>
+      <a href="https://otherstuff.ai" target="_blank" rel="noopener noreferrer">otherstuff.ai</a>
+    </div>
+  </div>
 
   <script>
     const video = document.getElementById('heroVideo');
     const instructions = document.getElementById('instructions');
+    const outro = document.getElementById('outro');
 
     async function attemptPlay() {
       try {
@@ -86,6 +152,10 @@
     document.addEventListener('DOMContentLoaded', attemptPlay);
     document.addEventListener('click', attemptPlay, { once: true });
     document.addEventListener('touchstart', attemptPlay, { once: true });
+
+    video.addEventListener('ended', () => {
+      outro.classList.add('show');
+    }, { once: true });
   </script>
 </body>
 </html>
